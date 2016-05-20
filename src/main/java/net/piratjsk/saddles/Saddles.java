@@ -1,5 +1,6 @@
 package net.piratjsk.saddles;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -12,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import org.mcstats.Metrics;
 
 import net.piratjsk.saddles.listeners.HorseListener;
 import net.piratjsk.saddles.listeners.SigningListener;
@@ -26,13 +29,19 @@ public class Saddles extends JavaPlugin {
         final ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE));
         recipe.addIngredient(Material.SADDLE);
         getServer().addRecipe(recipe);
+
+        // plugin metrics
+        try {
+            final Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (final IOException ignored) {}
     }
 
     public static ItemStack signSaddle(final ItemStack saddle, final Player player) {
         final ItemMeta meta = saddle.getItemMeta();
         ArrayList<String> lore = meta.hasLore() ? (ArrayList<String>) meta.getLore() : new ArrayList<String>();
         if (lore.size()>0) {
-            for (String line : lore)
+            for (final String line : lore)
                 if (line.equals(player.getUniqueId().toString()))
                     lore = null;
             if (lore!=null) lore.add(player.getUniqueId().toString());
@@ -55,7 +64,7 @@ public class Saddles extends JavaPlugin {
         return false;
     }
 
-    public static OfflinePlayer getOwner(final  ItemStack saddle) {
+    public static OfflinePlayer getOwner(final ItemStack saddle) {
         return Bukkit.getOfflinePlayer(UUID.fromString(saddle.getItemMeta().getLore().get(0)));
     }
 
