@@ -35,7 +35,7 @@ public class HorseListener implements Listener {
         if (event.getEntityType().equals(EntityType.HORSE)) {
             final Horse horse = (Horse) event.getEntity();
             final ItemStack saddle = horse.getInventory().getSaddle();
-            if (saddle.getItemMeta().hasLore()) {
+            if (saddle!=null && saddle.getItemMeta().hasLore()) {
                 if (horse.getPassenger()!=null) {
                     Entity damager = null;
                     if (event instanceof EntityDamageByEntityEvent)
