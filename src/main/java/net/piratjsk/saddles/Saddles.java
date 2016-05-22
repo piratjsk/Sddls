@@ -15,7 +15,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import org.mcstats.Metrics;
+import org.mcstats.MetricsLite;
 
 import net.piratjsk.saddles.listeners.HorseListener;
 import net.piratjsk.saddles.listeners.SigningListener;
@@ -43,7 +43,7 @@ public final class Saddles extends JavaPlugin {
 
         // plugin metrics
         try {
-            final Metrics metrics = new Metrics(this);
+            final MetricsLite metrics = new MetricsLite(this);
             metrics.start();
         } catch (final IOException ignored) {}
     }
@@ -101,7 +101,7 @@ public final class Saddles extends JavaPlugin {
     }
 
     public static List<UUID> getSignatures(final ItemStack saddle) {
-        List<UUID> signatures = new ArrayList<UUID>();
+        final List<UUID> signatures = new ArrayList<UUID>();
         if (saddle.getItemMeta().hasLore())
             for (final String line : saddle.getItemMeta().getLore())
                 if (isUUID(line))
