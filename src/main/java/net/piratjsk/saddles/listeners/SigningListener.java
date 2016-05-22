@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.piratjsk.saddles.Saddles;
 
-public class SigningListener implements Listener {
+public final class SigningListener implements Listener {
 
     @EventHandler
     public void onSaddleSign(final PrepareItemCraftEvent event) {

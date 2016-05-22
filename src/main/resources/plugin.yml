@@ -2,5 +2,10 @@ name: ${project.name}
 version: ${project.version}
 description: ${project.description}
 author: piratjsk
+website: ${project.url}
 
 main: net.piratjsk.saddles.Saddles
+
+commands:
+  saddles:
+    description: Prints information about plugin. With 'reload' argument reloads plugin configuration.
