@@ -23,6 +23,7 @@ import net.piratjsk.saddles.listeners.SigningListener;
 public final class Saddles extends JavaPlugin {
 
     public static String msg;
+    public final static ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE)).addIngredient(Material.SADDLE);
 
     @Override
     public void onEnable() {
@@ -37,8 +38,6 @@ public final class Saddles extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SigningListener(), this);
         getServer().getPluginManager().registerEvents(new HorseListener(), this);
         // register 'sign saddle' recipe
-        final ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE));
-        recipe.addIngredient(Material.SADDLE);
         getServer().addRecipe(recipe);
 
         // plugin metrics
