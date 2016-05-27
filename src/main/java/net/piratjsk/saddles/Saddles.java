@@ -77,6 +77,7 @@ public final class Saddles extends JavaPlugin {
 
     public static boolean hasAccess(final ItemStack saddle, final Entity entity) {
         if (!(entity instanceof Player)) return false;
+        if (entity.hasPermission("saddles.bypass")) return true;
         if (isSigned(saddle)) {
             for (final UUID signature : getSignatures(saddle))
                 if (signature.equals(entity.getUniqueId()))
