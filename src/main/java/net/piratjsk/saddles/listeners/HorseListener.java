@@ -48,15 +48,16 @@ public final class HorseListener implements Listener {
             final Horse horse = (Horse) event.getEntity();
             final ItemStack saddle = horse.getInventory().getSaddle();
             if (saddle!=null && Saddles.isSigned(saddle)) {
+                Entity damager = null;
+                if (event instanceof EntityDamageByEntityEvent)
+                    damager = ((EntityDamageByEntityEvent) event).getDamager();
                 if (horse.getPassenger()!=null) {
-                    Entity damager = null;
-                    if (event instanceof EntityDamageByEntityEvent)
-                        damager = ((EntityDamageByEntityEvent) event).getDamager();
                     if (damager != null && damager instanceof Player)
                         if (!Saddles.hasAccess(saddle,damager))
                             event.setCancelled(true);
                 } else {
-                    event.setCancelled(true);
+                    if (!Saddles.hasAccess(saddle,damager))
+                        event.setCancelled(true);
                 }
             }
         }
