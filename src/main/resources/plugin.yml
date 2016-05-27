@@ -9,3 +9,11 @@ main: net.piratjsk.saddles.Saddles
 commands:
   saddles:
     description: Prints information about plugin. With 'reload' argument reloads plugin configuration.
+
+permissions:
+  saddles.reload:
+    description: Allows you to use 'saddles reload' command.
+    default: op
+  saddles.bypass:
+    description: Allows you to bypass signed saddles protection.
+    default: op
