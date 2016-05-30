@@ -6,7 +6,7 @@
 
     <groupId>net.piratjsk</groupId>
     <artifactId>saddles</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <name>Saddles</name>
     <description>Protect your horses with signed saddles.</description>
     <url>https://github.com/piratjsk/Saddles</url>
@@ -68,6 +68,12 @@
             </plugin>
         </plugins>
         <resources>
+            <resource>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>LICENSE</include>
+                </includes>
+            </resource>
             <resource>
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
