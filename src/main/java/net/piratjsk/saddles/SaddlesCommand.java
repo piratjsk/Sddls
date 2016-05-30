@@ -19,6 +19,7 @@ public final class SaddlesCommand implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("saddles")) {
             if (args.length > 0 && args[0].equalsIgnoreCase("reload")){
                 if (sender instanceof ConsoleCommandSender || sender.hasPermission("saddles.reload")) {
+                    plugin.reloadConfig();
                     plugin.loadConfig();
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&6[Saddles] &rReloaded!"));
                     return true;
