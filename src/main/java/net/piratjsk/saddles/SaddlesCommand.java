@@ -15,7 +15,7 @@ public final class SaddlesCommand implements CommandExecutor {
         plugin.getCommand("saddles").setExecutor(this);
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
         if (cmd.getName().equalsIgnoreCase("saddles")) {
             if (args.length > 0 && args[0].equalsIgnoreCase("reload")){
                 if (sender instanceof ConsoleCommandSender || sender.hasPermission("saddles.reload")) {

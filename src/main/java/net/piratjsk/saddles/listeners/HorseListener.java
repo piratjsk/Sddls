@@ -36,7 +36,7 @@ public final class HorseListener implements Listener {
                             name = owner.getUniqueId().toString();
                         }
                     }
-                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', Saddles.msg.replaceAll("%owner%", name)));
+                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', Saddles.noAccessMsg.replaceAll("%owner%", name)));
                 }
             }
         }

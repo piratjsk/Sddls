@@ -22,14 +22,14 @@ import net.piratjsk.saddles.listeners.SigningListener;
 
 public final class Saddles extends JavaPlugin {
 
-    public static String msg;
+    public static String noAccessMsg;
     public final static ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE)).addIngredient(Material.SADDLE);
 
     @Override
     public void onEnable() {
         // config
-        saveDefaultConfig();
-        loadConfig();
+        this.saveDefaultConfig();
+        this.loadConfig();
 
         // 'saddles' command
         new SaddlesCommand(this);
@@ -48,7 +48,7 @@ public final class Saddles extends JavaPlugin {
     }
 
     public void loadConfig() {
-        msg = this.getConfig().getString("msg");
+        noAccessMsg = this.getConfig().getString("no-access-msg");
     }
 
     public static ItemStack signSaddle(final ItemStack saddle, final Player player) {
