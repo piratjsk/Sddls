@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -49,16 +50,19 @@ public final class HorseListener implements Listener {
             final ItemStack saddle = horse.getInventory().getSaddle();
             if (saddle!=null && Saddles.isSigned(saddle)) {
                 Entity damager = null;
-                if (event instanceof EntityDamageByEntityEvent)
+                if (event instanceof EntityDamageByEntityEvent) {
                     damager = ((EntityDamageByEntityEvent) event).getDamager();
-                if (horse.getPassenger()!=null) {
-                    if (damager != null && damager instanceof Player)
-                        if (!Saddles.hasAccess(saddle,damager))
-                            event.setCancelled(true);
-                } else {
+                    if (damager instanceof Projectile)
+                        if (((Projectile)damager).getShooter() instanceof Player)
+                            damager = (Player) ((Projectile) damager).getShooter();
+                    if (!(damager instanceof Player)) damager = null;
+                }
+                if (damager!=null)
                     if (!Saddles.hasAccess(saddle,damager))
                         event.setCancelled(true);
-                }
+                else
+                    if (horse.getPassenger()==null)
+                        event.setCancelled(true);
             }
         }
     }
