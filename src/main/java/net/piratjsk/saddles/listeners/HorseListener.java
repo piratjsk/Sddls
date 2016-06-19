@@ -57,12 +57,13 @@ public final class HorseListener implements Listener {
                             damager = (Player) ((Projectile) damager).getShooter();
                     if (!(damager instanceof Player)) damager = null;
                 }
-                if (damager!=null)
-                    if (!Saddles.hasAccess(saddle,damager))
+                if (damager!=null) {
+                    if (!Saddles.hasAccess(saddle, damager))
                         event.setCancelled(true);
-                else
+                } else {
                     if (horse.getPassenger()==null)
                         event.setCancelled(true);
+                }
             }
         }
     }
