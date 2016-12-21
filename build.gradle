@@ -19,6 +19,6 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 processResources {
     from('src/main/resources') {
-        filter ReplaceTokens, tokens: [version: version, name: name]
+        filter ReplaceTokens, tokens: [version: version, name: rootProject.name]
     }
 }
