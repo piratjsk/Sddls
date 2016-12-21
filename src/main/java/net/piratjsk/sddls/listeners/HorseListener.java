@@ -1,4 +1,4 @@
-package net.piratjsk.saddles.listeners;
+package net.piratjsk.sddls.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -14,7 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
-import net.piratjsk.saddles.Saddles;
+import net.piratjsk.sddls.Sddls;
 
 public final class HorseListener implements Listener {
 
@@ -23,10 +23,10 @@ public final class HorseListener implements Listener {
         if (event.getRightClicked() instanceof Horse) {
             final Horse horse = (Horse) event.getRightClicked();
             final ItemStack saddle = horse.getInventory().getSaddle();
-            if (saddle!=null && Saddles.isSigned(saddle)) {
-                if (!Saddles.hasAccess(saddle, event.getPlayer())) {
+            if (saddle!=null && Sddls.isSigned(saddle)) {
+                if (!Sddls.hasAccess(saddle, event.getPlayer())) {
                     event.setCancelled(true);
-                    final OfflinePlayer owner = Saddles.getOwner(saddle);
+                    final OfflinePlayer owner = Sddls.getOwner(saddle);
                     String name = "undefined";
                     if (owner!=null) {
                         if (owner.hasPlayedBefore()) {
@@ -37,7 +37,7 @@ public final class HorseListener implements Listener {
                             name = owner.getUniqueId().toString();
                         }
                     }
-                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', Saddles.noAccessMsg.replaceAll("%owner%", name)));
+                    event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', Sddls.noAccessMsg.replaceAll("%owner%", name)));
                 }
             }
         }
@@ -48,7 +48,7 @@ public final class HorseListener implements Listener {
         if (event.getEntityType().equals(EntityType.HORSE)) {
             final Horse horse = (Horse) event.getEntity();
             final ItemStack saddle = horse.getInventory().getSaddle();
-            if (saddle!=null && Saddles.isSigned(saddle)) {
+            if (saddle!=null && Sddls.isSigned(saddle)) {
                 Entity damager = null;
                 if (event instanceof EntityDamageByEntityEvent) {
                     damager = ((EntityDamageByEntityEvent) event).getDamager();
@@ -58,7 +58,7 @@ public final class HorseListener implements Listener {
                     if (!(damager instanceof Player)) damager = null;
                 }
                 if (damager!=null) {
-                    if (!Saddles.hasAccess(saddle, damager))
+                    if (!Sddls.hasAccess(saddle, damager))
                         event.setCancelled(true);
                 } else {
                     if (horse.getPassenger()==null)

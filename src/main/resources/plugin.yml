@@ -1,19 +1,19 @@
-name: ${project.name}
-version: ${project.version}
-description: ${project.description}
+name: @name@
+version: @version@
+description: Bukkit plugin that lets you protect horses with signed saddles.
 author: piratjsk
-website: ${project.url}
+website: https://github.com/piratjsk/Sddls
 
-main: net.piratjsk.saddles.Saddles
+main: net.piratjsk.sddls.Sddls
 
 commands:
-  saddles:
+  sddls:
     description: Prints information about plugin. With 'reload' argument reloads plugin configuration.
 
 permissions:
-  saddles.reload:
-    description: Allows you to use 'saddles reload' command.
+  sddls.reload:
+    description: Allows you to use 'sddls reload' command.
     default: op
-  saddles.bypass:
+  sddls.bypass:
     description: Allows you to bypass signed saddles protection.
     default: op

@@ -1,4 +1,4 @@
-package net.piratjsk.saddles;
+package net.piratjsk.sddls;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,12 +15,10 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import org.mcstats.MetricsLite;
+import net.piratjsk.sddls.listeners.HorseListener;
+import net.piratjsk.sddls.listeners.SigningListener;
 
-import net.piratjsk.saddles.listeners.HorseListener;
-import net.piratjsk.saddles.listeners.SigningListener;
-
-public final class Saddles extends JavaPlugin {
+public final class Sddls extends JavaPlugin {
 
     public static String noAccessMsg;
     public final static ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE)).addIngredient(Material.SADDLE);
@@ -31,20 +29,14 @@ public final class Saddles extends JavaPlugin {
         this.saveDefaultConfig();
         this.loadConfig();
 
-        // 'saddles' command
-        new SaddlesCommand(this);
+        // 'sddls' command
+        this.getCommand("sddls").setExecutor(new SddlsCommand(this));
 
         // listeners
-        getServer().getPluginManager().registerEvents(new SigningListener(), this);
-        getServer().getPluginManager().registerEvents(new HorseListener(), this);
+        this.getServer().getPluginManager().registerEvents(new SigningListener(), this);
+        this.getServer().getPluginManager().registerEvents(new HorseListener(), this);
         // register 'sign saddle' recipe
-        getServer().addRecipe(recipe);
-
-        // plugin metrics
-        try {
-            final MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        } catch (final IOException ignored) {}
+        this.getServer().addRecipe(recipe);
     }
 
     public void loadConfig() {
@@ -56,7 +48,7 @@ public final class Saddles extends JavaPlugin {
         final ArrayList<String> lore = meta.hasLore() ? (ArrayList<String>) meta.getLore() : new ArrayList<String>();
         if (isSigned(saddle)) {
             boolean cleaned = false;
-            for (final UUID signature : Saddles.getSignatures(saddle)) {
+            for (final UUID signature : Sddls.getSignatures(saddle)) {
                 if (signature.equals(player.getUniqueId())) {
                     for (final Object line : lore.toArray())
                         if (isUUID(line.toString()))
@@ -76,7 +68,7 @@ public final class Saddles extends JavaPlugin {
 
     public static boolean hasAccess(final ItemStack saddle, final Entity entity) {
         if (!(entity instanceof Player)) return false;
-        if (entity.hasPermission("saddles.bypass")) return true;
+        if (entity.hasPermission("sddls.bypass")) return true;
         if (isSigned(saddle)) {
             for (final UUID signature : getSignatures(saddle))
                 if (signature.equals(entity.getUniqueId()))
