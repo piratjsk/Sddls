@@ -13,7 +13,7 @@ import net.piratjsk.sddls.Sddls;
 public final class SigningListener implements Listener {
 
     @EventHandler
-    public void onSddlSign(final PrepareItemCraftEvent event) {
+    public void onSaddleSign(final PrepareItemCraftEvent event) {
         if (event.getRecipe() instanceof ShapelessRecipe) {
             final ShapelessRecipe recipe = (ShapelessRecipe)event.getRecipe();
             if (recipe.getIngredientList().equals(Sddls.recipe.getIngredientList())) {
