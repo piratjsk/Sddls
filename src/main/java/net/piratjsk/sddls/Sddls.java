@@ -1,6 +1,5 @@
 package net.piratjsk.sddls;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +16,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.piratjsk.sddls.listeners.HorseListener;
 import net.piratjsk.sddls.listeners.SigningListener;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.HorseInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 public final class Sddls extends JavaPlugin {
 
@@ -41,6 +44,23 @@ public final class Sddls extends JavaPlugin {
 
     public void loadConfig() {
         noAccessMsg = this.getConfig().getString("no-access-msg");
+    }
+    
+    public static boolean isHorse(final Entity entity) {
+        final EntityType type = entity.getType();
+        return     type.equals(EntityType.HORSE)
+                || type.equals(EntityType.SKELETON_HORSE)
+                || type.equals(EntityType.ZOMBIE_HORSE)
+                || type.equals(EntityType.DONKEY)
+                || type.equals(EntityType.MULE);
+    }
+
+    public static ItemStack getSaddle(final Entity entity) {
+        if (!Sddls.isHorse(entity)) return null;
+        final Inventory inv = ((InventoryHolder) entity).getInventory();;
+        if (inv instanceof HorseInventory)
+            return ((HorseInventory) inv).getSaddle();
+        return inv.getItem(0);
     }
 
     public static ItemStack signSaddle(final ItemStack saddle, final Player player) {
