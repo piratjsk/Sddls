@@ -1,1 +1,25 @@
-no-access-msg: "&6[Sddls] &7This horse is owned by %owner%."
+# Number of days player must be offline to remove his signatures.
+# Set to false to disable.
+singature-expires-after: 14
+
+protect:
+  horse: true
+  zombie-horse: true
+  skeleton-horse: true
+  donkey: true
+  mule: true
+  pig: true
+  lama: false
+
+# Available variables:
+# %mount% - type of the mount (horse, zombie horse, donkey, ...)
+# %Mount% - same as %mount% but starts with capital letter
+# %name% - name of the mount (if it's set, if not then value of %mount%)
+# %Name% - same as %name% but starts with capital letter
+# %players% - list of comma separated names of players who signed the saddle
+no-access-msg: "&6[Sddls] &7You don't have access to this %mount%."
+# You can override this message for specific mount types by setting:
+# > no-access-msg-{type}: {message}
+# for example:
+# > no-access-msg-donkey: &7hee-haw!
+# > no-access-msg-pig: &dPig: &fYou have no power over me!
