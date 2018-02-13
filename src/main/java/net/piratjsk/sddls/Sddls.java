@@ -23,27 +23,31 @@ import org.bukkit.inventory.InventoryHolder;
 
 public final class Sddls extends JavaPlugin {
 
-    public static String noAccessMsg;
     public final static ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE)).addIngredient(Material.SADDLE);
 
     @Override
     public void onEnable() {
-        // config
-        this.saveDefaultConfig();
-        this.loadConfig();
-
-        // 'sddls' command
-        this.getCommand("sddls").setExecutor(new SddlsCommand(this));
-
-        // listeners
-        this.getServer().getPluginManager().registerEvents(new SigningListener(), this);
-        this.getServer().getPluginManager().registerEvents(new HorseListener(), this);
-        // register 'sign saddle' recipe
-        this.getServer().addRecipe(recipe);
+        this.setupConfig();
+        this.registerCommand();
+        this.registerListeners();
+        this.registerRecipe();
     }
 
-    public void loadConfig() {
-        noAccessMsg = this.getConfig().getString("no-access-msg");
+    private void setupConfig() {
+        this.saveDefaultConfig();
+    }
+
+    private void registerCommand() {
+        this.getCommand("sddls").setExecutor(new SddlsCommand(this));
+    }
+
+    private void registerListeners() {
+        this.getServer().getPluginManager().registerEvents(new SigningListener(), this);
+        this.getServer().getPluginManager().registerEvents(new HorseListener(), this);
+    }
+
+    private void registerRecipe() {
+        this.getServer().addRecipe(recipe);
     }
     
     public static boolean isHorse(final Entity entity) {
