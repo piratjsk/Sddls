@@ -1,24 +1,28 @@
-apply plugin: 'java'
+plugins {
+    id "java"
+}
 
-group = 'net.piratjsk'
-version = '2.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+group = project.property("group")
+version = project.property("version")
+sourceCompatibility = project.property("sourceVersion")
 
 repositories {
     jcenter()
-    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
 }
 
 dependencies {
-    compile 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+    compile "org.bukkit:bukkit:${project.property("bukkitVersion")}"
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
 
 processResources {
-    from('src/main/resources') {
-        filter ReplaceTokens, tokens: [version: version, name: rootProject.name]
+    from("src/main/resources") {
+        filter ReplaceTokens, tokens: [
+                "group": project.property("group"),
+                "name": project.property("name"),
+                "version": project.property("version")
+        ]
     }
 }

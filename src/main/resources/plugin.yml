@@ -4,7 +4,7 @@ description: Bukkit plugin that lets you protect horses with signed saddles.
 author: piratjsk
 website: https://github.com/piratjsk/Sddls
 
-main: net.piratjsk.sddls.Sddls
+main: @group@.Sddls
 
 commands:
   sddls:
