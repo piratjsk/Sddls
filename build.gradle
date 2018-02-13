@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
 group = 'net.piratjsk'
-version = '1.2'
+version = '2.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
