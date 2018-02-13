@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.bukkit:bukkit:1.11.2-R0.1-SNAPSHOT'
+    compile 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
