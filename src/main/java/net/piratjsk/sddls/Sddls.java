@@ -1,5 +1,7 @@
 package net.piratjsk.sddls;
 
+import net.piratjsk.sddls.storage.SddlsStorage;
+import net.piratjsk.sddls.storage.YAMLSddlsStorage;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +14,8 @@ import org.bukkit.entity.EntityType;
 public final class Sddls extends JavaPlugin {
 
     public final static ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE)).addIngredient(Material.SADDLE);
+
+    private DataManager dataManager;
 
     @Override
     public void onEnable() {
@@ -37,6 +41,18 @@ public final class Sddls extends JavaPlugin {
     private void registerRecipe() {
         this.getServer().addRecipe(recipe);
     }
+
+    private void setupDataManager() {
+        // TODO: implement more storage types
+        // TODO: make it configurable using plugin config.yml
+        final SddlsStorage storage = new YAMLSddlsStorage(this);
+    }
+
+    public DataManager getDataManager() {
+        return this.dataManager;
+    }
+
+
     
     public static boolean canBeProtected(final EntityType entityType) {
         final ConfigurationSection config = getInstance().getConfig().getConfigurationSection("protect");

@@ -14,7 +14,7 @@ public class ProtectedMount {
     private final UUID entity;
     private final Saddle saddle;
 
-    private ProtectedMount(final UUID entity, final Saddle saddle) {
+    public ProtectedMount(final UUID entity, final Saddle saddle) {
         this.entity = entity;
         this.saddle = saddle;
     }
