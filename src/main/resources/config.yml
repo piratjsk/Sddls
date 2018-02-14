@@ -1,6 +1,6 @@
 # Number of days player must be offline to remove his signatures.
 # Set to false to disable.
-singature-expires-after: 14
+signature-expires-after: 14
 
 protect:
   horse: true
