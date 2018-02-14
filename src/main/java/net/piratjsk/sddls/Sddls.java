@@ -4,10 +4,12 @@ import net.piratjsk.sddls.storage.SddlsStorage;
 import net.piratjsk.sddls.storage.YAMLSddlsStorage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,7 +21,15 @@ import java.util.stream.Collectors;
 
 public final class Sddls extends JavaPlugin {
 
-    public final static ShapelessRecipe recipe = new ShapelessRecipe(new ItemStack(Material.SADDLE)).addIngredient(Material.SADDLE);
+    public final ShapelessRecipe saddleSignRecipe = new ShapelessRecipe(
+            new NamespacedKey(this, "saddleSign"),
+            new ItemStack(Material.SADDLE)
+    ).addIngredient(Material.SADDLE);
+
+    public final ShapelessRecipe carpetSignRecipe = new ShapelessRecipe(
+            new NamespacedKey(this, "carpetSign"),
+            new ItemStack(Material.CARPET)
+    ).addIngredient(Material.CARPET);
 
     private DataManager dataManager;
 
@@ -28,7 +38,7 @@ public final class Sddls extends JavaPlugin {
         this.setupConfig();
         this.registerCommand();
         this.registerListeners();
-        this.registerRecipe();
+        this.registerRecipes();
     }
 
     private void setupConfig() {
@@ -40,12 +50,13 @@ public final class Sddls extends JavaPlugin {
     }
 
     private void registerListeners() {
-        this.getServer().getPluginManager().registerEvents(new SigningListener(), this);
+        this.getServer().getPluginManager().registerEvents(new SigningListener(this), this);
         this.getServer().getPluginManager().registerEvents(new MountListener(this), this);
     }
 
-    private void registerRecipe() {
-        this.getServer().addRecipe(recipe);
+    private void registerRecipes() {
+        this.getServer().addRecipe(this.saddleSignRecipe);
+        this.getServer().addRecipe(this.carpetSignRecipe);
     }
 
     private void setupDataManager() {
@@ -93,5 +104,13 @@ public final class Sddls extends JavaPlugin {
 
     private static Sddls getInstance() {
         return JavaPlugin.getPlugin(Sddls.class);
+    }
+
+    public boolean isSigningRecipe(final Recipe recipe) {
+        if (!(recipe instanceof ShapelessRecipe)) return false;
+        final ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
+        if (shapelessRecipe.getKey().equals(this.saddleSignRecipe.getKey())) return true;
+        if (shapelessRecipe.getKey().equals(this.carpetSignRecipe.getKey())) return true;
+        return false;
     }
 }
