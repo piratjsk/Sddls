@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Saddle {
 
@@ -26,6 +27,7 @@ public class Saddle {
     }
 
     public ItemStack getItem() {
+        this.updateItem();
         return this.saddleItem;
     }
 
@@ -35,6 +37,20 @@ public class Saddle {
 
     public void sign(final Signature signature) {
         this.signatures.add(signature);
+    }
+
+    public void updateItem() {
+        this.updateSignatures();
+        final List<String> lore = this.saddleItem.getItemMeta().getLore();
+        lore.clear();
+        this.signatures.forEach( sig -> lore.add(sig.toString()));
+        this.saddleItem.getItemMeta().setLore(lore);
+    }
+
+    public void updateSignatures() {
+        if (Sddls.getInstance().getConfig().isBoolean("signature-expires-after")) return;
+        final int shelfTimeInDays = Sddls.getInstance().getConfig().getInt("signature-expires-after");
+        this.signatures.removeIf(sig -> sig.hasExpired(shelfTimeInDays));
     }
 
     public static Saddle fromItemStack(final ItemStack saddleItem) {
