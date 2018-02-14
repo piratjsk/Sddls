@@ -35,8 +35,10 @@ public class Signature {
 
     public static Signature fromString(final String loreLine) {
         final String uuidCode = loreLine.split(" ")[1].trim();
-        // TODO: implement
-        return null;
+        final UUID uuid = Sddls.getInstance().getDataManager().getUUID(uuidCode);
+        if (uuid == null)
+            return null;
+        return new Signature(uuid);
     }
 
 

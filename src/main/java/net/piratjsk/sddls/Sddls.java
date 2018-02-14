@@ -102,7 +102,7 @@ public final class Sddls extends JavaPlugin {
         return false;
     }
 
-    private static Sddls getInstance() {
+    public static Sddls getInstance() {
         return JavaPlugin.getPlugin(Sddls.class);
     }
 
