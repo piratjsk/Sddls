@@ -56,15 +56,17 @@ public class SignedSaddle {
     public static SignedSaddle fromItemStack(final ItemStack saddleItem) {
         if (!isValidSaddleItem(saddleItem)) return null;
         final Collection<Signature> signatures = new ArrayList<>();
-        saddleItem.getItemMeta().getLore().forEach( line -> {
-            final Signature signature = Signature.fromString(line);
-            if (signature != null) signatures.add(signature);
-        });
+        if (saddleItem.hasItemMeta() && saddleItem.getItemMeta().hasLore()) {
+            saddleItem.getItemMeta().getLore().forEach( line -> {
+                final Signature signature = Signature.fromString(line);
+                if (signature != null) signatures.add(signature);
+            });
+        }
         return new SignedSaddle(signatures, saddleItem);
     }
 
     private static boolean isValidSaddleItem(final ItemStack item) {
-        return item.getType().equals(Material.SADDLE) || item.getType().equals(Material.CARPET);
+        return item != null && (item.getType().equals(Material.SADDLE) || item.getType().equals(Material.CARPET));
     }
 
 }
