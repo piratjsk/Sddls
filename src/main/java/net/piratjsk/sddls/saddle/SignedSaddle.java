@@ -1,19 +1,21 @@
-package net.piratjsk.sddls;
+package net.piratjsk.sddls.saddle;
 
+import net.piratjsk.sddls.Sddls;
+import net.piratjsk.sddls.signature.Signature;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Saddle {
+public class SignedSaddle {
 
     private final Collection<Signature> signatures;
     private final ItemStack saddleItem;
 
-    public Saddle(final Collection<Signature> signatures, final ItemStack saddleItem) {
+    public SignedSaddle(final Collection<Signature> signatures, final ItemStack saddleItem) {
         this.signatures = signatures;
         this.saddleItem = saddleItem;
     }
@@ -22,11 +24,12 @@ public class Saddle {
         return !this.signatures.isEmpty();
     }
 
-    public boolean isSignedBy(final Player player) {
+    public boolean isSignedBy(final OfflinePlayer player) {
         return this.signatures.stream().anyMatch( sig -> sig.matchesPlayer(player));
     }
 
     public ItemStack getItem() {
+        this.updateSignatures(Sddls.getOfflineDaysLimit());
         this.updateItem();
         return this.saddleItem;
     }
@@ -40,27 +43,24 @@ public class Saddle {
     }
 
     public void updateItem() {
-        this.updateSignatures();
         final List<String> lore = this.saddleItem.getItemMeta().getLore();
         lore.clear();
         this.signatures.forEach( sig -> lore.add(sig.toString()));
         this.saddleItem.getItemMeta().setLore(lore);
     }
 
-    public void updateSignatures() {
-        if (Sddls.getInstance().getConfig().isBoolean("signature-expires-after")) return;
-        final int shelfTimeInDays = Sddls.getInstance().getConfig().getInt("signature-expires-after");
-        this.signatures.removeIf(sig -> sig.hasExpired(shelfTimeInDays));
+    public void updateSignatures(final int offlineDaysLimit) {
+        this.signatures.removeIf(sig -> sig.hasExpired(offlineDaysLimit));
     }
 
-    public static Saddle fromItemStack(final ItemStack saddleItem) {
+    public static SignedSaddle fromItemStack(final ItemStack saddleItem) {
         if (!isValidSaddleItem(saddleItem)) return null;
         final Collection<Signature> signatures = new ArrayList<>();
         saddleItem.getItemMeta().getLore().forEach( line -> {
             final Signature signature = Signature.fromString(line);
             if (signature != null) signatures.add(signature);
         });
-        return new Saddle(signatures, saddleItem);
+        return new SignedSaddle(signatures, saddleItem);
     }
 
     private static boolean isValidSaddleItem(final ItemStack item) {

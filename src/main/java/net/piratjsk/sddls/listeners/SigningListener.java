@@ -1,7 +1,8 @@
 package net.piratjsk.sddls.listeners;
 
-import net.piratjsk.sddls.Saddle;
-import net.piratjsk.sddls.Signature;
+import net.piratjsk.sddls.saddle.SignedSaddle;
+import net.piratjsk.sddls.signature.Signature;
+import net.piratjsk.sddls.signature.SignatureType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,11 +24,13 @@ public final class SigningListener implements Listener {
         if (!this.sddls.isSigningRecipe(event.getRecipe())) return;
         final Player player = (Player) event.getView().getPlayer();
         final ItemStack toSign = event.getInventory().getMatrix()[0];
-        final Saddle saddle = Saddle.fromItemStack(toSign);
+        final SignedSaddle saddle = SignedSaddle.fromItemStack(toSign);
         if (saddle.isSignedBy(player)) {
             saddle.getSignatures().clear();
         } else {
-            saddle.sign(new Signature(player.getUniqueId()));
+            final SignatureType signatureType = SignatureType.valueOf(this.sddls.getConfig().getString("signature-type"));
+            final Signature signature = this.sddls.getPlayerSignature(player);
+            saddle.sign(signature);
         }
         event.getInventory().setResult(saddle.getItem());
     }

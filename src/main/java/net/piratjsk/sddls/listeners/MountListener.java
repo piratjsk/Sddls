@@ -1,6 +1,6 @@
 package net.piratjsk.sddls.listeners;
 
-import net.piratjsk.sddls.ProtectedMount;
+import net.piratjsk.sddls.mount.ProtectedMount;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -23,7 +23,7 @@ public final class MountListener implements Listener {
 
     @EventHandler
     public void onHorseAccess(final PlayerInteractEntityEvent event) {
-        if (!Sddls.canBeProtected(event.getRightClicked().getType())) return;
+        if (!this.sddls.canBeProtected(event.getRightClicked().getType())) return;
         final ProtectedMount mount = ProtectedMount.fromEntity(event.getRightClicked());
         if (mount.isProtectedFromPlayer(event.getPlayer())) {
             event.setCancelled(true);
@@ -33,7 +33,7 @@ public final class MountListener implements Listener {
 
     @EventHandler
     public void onHorseDamage(final EntityDamageEvent event) {
-        if (!Sddls.canBeProtected(event.getEntityType())) return;
+        if (!this.sddls.canBeProtected(event.getEntityType())) return;
         final ProtectedMount mount = ProtectedMount.fromEntity(event.getEntity());
         final Player damager = this.getPlayerDamager(event);
         if (damager != null) {
@@ -41,8 +41,7 @@ public final class MountListener implements Listener {
                 event.setCancelled(true);
             }
         }
-
-        if (mount.isProtectedFromEnivroment()) {
+        if (mount.isProtectedFromEnvironment()) {
             event.setCancelled(true);
         }
     }

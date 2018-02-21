@@ -1,10 +1,15 @@
 package net.piratjsk.sddls;
 
-import net.piratjsk.sddls.storage.SddlsStorage;
-import net.piratjsk.sddls.storage.YAMLSddlsStorage;
+import net.piratjsk.sddls.mount.ProtectedMount;
+import net.piratjsk.sddls.signature.FancySignature;
+import net.piratjsk.sddls.signature.Signature;
+import net.piratjsk.sddls.signature.SignatureType;
+import net.piratjsk.sddls.signature.UUIDSignature;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,23 +20,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.piratjsk.sddls.listeners.MountListener;
 import net.piratjsk.sddls.listeners.SigningListener;
+import static net.piratjsk.sddls.utils.StringUtils.capitalizeFirstLetter;
 import org.bukkit.entity.EntityType;
 
 import java.util.stream.Collectors;
 
 public final class Sddls extends JavaPlugin {
 
-    public final ShapelessRecipe saddleSignRecipe = new ShapelessRecipe(
+    private final ShapelessRecipe saddleSignRecipe = new ShapelessRecipe(
             new NamespacedKey(this, "saddleSign"),
             new ItemStack(Material.SADDLE)
     ).addIngredient(Material.SADDLE);
 
-    public final ShapelessRecipe carpetSignRecipe = new ShapelessRecipe(
+    private final ShapelessRecipe carpetSignRecipe = new ShapelessRecipe(
             new NamespacedKey(this, "carpetSign"),
             new ItemStack(Material.CARPET)
     ).addIngredient(Material.CARPET);
-
-    private DataManager dataManager;
 
     @Override
     public void onEnable() {
@@ -56,17 +60,8 @@ public final class Sddls extends JavaPlugin {
 
     private void registerRecipes() {
         this.getServer().addRecipe(this.saddleSignRecipe);
-        this.getServer().addRecipe(this.carpetSignRecipe);
-    }
-
-    private void setupDataManager() {
-        // TODO: implement more storage types
-        // TODO: make it configurable using plugin config.yml
-        final SddlsStorage storage = new YAMLSddlsStorage(this);
-    }
-
-    public DataManager getDataManager() {
-        return this.dataManager;
+        if (this.canBeProtected(EntityType.LLAMA))
+            this.getServer().addRecipe(this.carpetSignRecipe);
     }
 
     public void sendNoAccessMessage(final Player player, final ProtectedMount mount) {
@@ -86,12 +81,8 @@ public final class Sddls extends JavaPlugin {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
-    private static String capitalizeFirstLetter(final String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1);
-    }
-
-    public static boolean canBeProtected(final EntityType entityType) {
-        final ConfigurationSection config = getInstance().getConfig().getConfigurationSection("protect");
+    public boolean canBeProtected(final EntityType entityType) {
+        final ConfigurationSection config = this.getConfig().getConfigurationSection("protect");
         if (entityType.equals(EntityType.HORSE)) return config.getBoolean("horse");
         if (entityType.equals(EntityType.ZOMBIE_HORSE)) return config.getBoolean("zombie-horse");
         if (entityType.equals(EntityType.SKELETON_HORSE)) return config.getBoolean("skeleton-horse");
@@ -102,10 +93,6 @@ public final class Sddls extends JavaPlugin {
         return false;
     }
 
-    public static Sddls getInstance() {
-        return JavaPlugin.getPlugin(Sddls.class);
-    }
-
     public boolean isSigningRecipe(final Recipe recipe) {
         if (!(recipe instanceof ShapelessRecipe)) return false;
         final ShapelessRecipe shapelessRecipe = (ShapelessRecipe) recipe;
@@ -113,4 +100,22 @@ public final class Sddls extends JavaPlugin {
         if (shapelessRecipe.getKey().equals(this.carpetSignRecipe.getKey())) return true;
         return false;
     }
+
+    public Signature getPlayerSignature(final OfflinePlayer player) {
+        final SignatureType type = SignatureType.valueOf(this.getConfig().getString("signature-type"));
+        if (type == SignatureType.UUID)
+            return new UUIDSignature(player.getUniqueId());
+        if (type == SignatureType.FANCY)
+            return new FancySignature(player.getUniqueId());
+        return null;
+    }
+
+    public static int getOfflineDaysLimit() {
+        final Configuration config = JavaPlugin.getPlugin(Sddls.class).getConfig();
+        int offlineDaysLimit = 0; // signatures will not expire if limit is set to 0
+        if (config.isInt("signature-expires-after"))
+            offlineDaysLimit = config.getInt("signature-expires-after");
+        return offlineDaysLimit;
+    }
+
 }
