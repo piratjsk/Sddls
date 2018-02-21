@@ -28,4 +28,9 @@ public interface Signature {
         return null;
     }
 
+    static boolean isSignature(final String line) {
+        return line.matches(UUIDSignature.pattern)
+                || line.matches(FancySignature.pattern);
+    }
+
 }

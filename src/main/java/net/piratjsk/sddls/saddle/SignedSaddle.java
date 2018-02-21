@@ -5,6 +5,7 @@ import net.piratjsk.sddls.signature.Signature;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,10 +44,33 @@ public class SignedSaddle {
     }
 
     public void updateItem() {
-        final List<String> lore = this.saddleItem.getItemMeta().getLore();
-        lore.clear();
-        this.signatures.forEach( sig -> lore.add(sig.toString()));
-        this.saddleItem.getItemMeta().setLore(lore);
+        final List<String> lore = this.getSaddleItemLore();
+
+        // remove all signatures from item lore
+        lore.removeIf(Signature::isSignature);
+
+        // re-add signatures to lore (if there are any)
+        if (this.isSigned()) {
+            this.getSignatures().forEach( sig -> lore.add(sig.toString()));
+        }
+
+        // update item lore
+        this.setSaddleItemLore(lore);
+    }
+
+    private List<String> getSaddleItemLore() {
+        final List<String> lore = new ArrayList<>();
+        if (this.saddleItem.hasItemMeta() && this.saddleItem.getItemMeta().hasLore()) {
+            lore.clear();
+            lore.addAll(this.saddleItem.getItemMeta().getLore());
+        }
+        return lore;
+    }
+
+    private void setSaddleItemLore(final List<String> newLore) {
+        final ItemMeta itemMeta = this.saddleItem.getItemMeta();
+        itemMeta.setLore(newLore);
+        this.saddleItem.setItemMeta(itemMeta);
     }
 
     public void updateSignatures(final int offlineDaysLimit) {

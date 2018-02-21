@@ -48,7 +48,7 @@ public class UUIDSignature implements Signature {
 
     @Override
     public boolean hasExpired(int offlineDaysLimit) {
-        if (offlineDaysLimit <= 0) return false;
+        if (offlineDaysLimit <= 0 || this.getPlayer().isOnline()) return false;
         final long lastPlayed = this.getPlayer().getLastPlayed();
         if (lastPlayed == 0) return true;
         final long offlineMilisLimit = TimeUnit.MILLISECONDS.convert(offlineDaysLimit, TimeUnit.DAYS);
