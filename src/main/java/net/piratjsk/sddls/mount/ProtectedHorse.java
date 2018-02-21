@@ -24,13 +24,14 @@ public class ProtectedHorse extends GenericMount {
     public boolean isProtectedFromEnvironment() {
         if (!this.isSaddled()) return false;
         if (!this.saddle.isSigned()) return false;
-        return this.hasPassenger();
+        return !this.hasPassenger();
     }
 
     @Override
     public boolean isProtectedFromPlayer(final OfflinePlayer player) {
         if (!this.isSaddled()) return false;
-        return this.saddle.isSignedBy(player);
+        if (player.isOnline() && player.getPlayer().hasPermission("sddls.bypass")) return false;
+        return !this.saddle.isSignedBy(player);
     }
 
     @Override
