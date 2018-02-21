@@ -102,7 +102,8 @@ public final class Sddls extends JavaPlugin {
     }
 
     public Signature getPlayerSignature(final OfflinePlayer player) {
-        final SignatureType type = SignatureType.valueOf(this.getConfig().getString("signature-type"));
+        final String typeString = this.getConfig().getString("signature-type", "fancy").toUpperCase().replaceAll(" ", "_");
+        final SignatureType type = SignatureType.valueOf(typeString);
         if (type == SignatureType.UUID)
             return new UUIDSignature(player.getUniqueId());
         if (type == SignatureType.FANCY)
