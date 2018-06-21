@@ -4,6 +4,7 @@ import net.piratjsk.sddls.Sddls;
 import net.piratjsk.sddls.signature.Signature;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -36,7 +37,16 @@ public class SignedSaddle {
     }
 
     public Collection<Signature> getSignatures() {
-        return this.signatures;
+        return new ArrayList<>(this.signatures);
+    }
+
+    public void removeAllSignatures() {
+        this.signatures.clear();
+    }
+
+    public void sign(final Player player) {
+        final Signature signature = new Signature(player.getUniqueId());
+        this.sign(signature);
     }
 
     public void sign(final Signature signature) {
@@ -44,10 +54,10 @@ public class SignedSaddle {
     }
 
     public void updateItem() {
-        final List<String> lore = this.getSaddleItemLore();
+        final List<String> lore = getSaddleItemLore();
 
         // remove all signatures from item lore
-        lore.removeIf(Signature::isSignature);
+        lore.removeIf(line -> line.startsWith(Sddls.PREFIX));
 
         // re-add signatures to lore (if there are any)
         if (this.isSigned()) {
@@ -78,7 +88,7 @@ public class SignedSaddle {
     }
 
     public static SignedSaddle fromItemStack(final ItemStack saddleItem) {
-        if (!isValidSaddleItem(saddleItem)) return null;
+        if (!isValidSaddleItem(saddleItem)) return new NotReallyASaddle(saddleItem);
         final Collection<Signature> signatures = new ArrayList<>();
         if (saddleItem.hasItemMeta() && saddleItem.getItemMeta().hasLore()) {
             saddleItem.getItemMeta().getLore().forEach( line -> {
@@ -89,7 +99,7 @@ public class SignedSaddle {
         return new SignedSaddle(signatures, saddleItem);
     }
 
-    private static boolean isValidSaddleItem(final ItemStack item) {
+    public static boolean isValidSaddleItem(final ItemStack item) {
         return item != null && (item.getType().equals(Material.SADDLE) || item.getType().equals(Material.CARPET));
     }
 

@@ -1,7 +1,6 @@
 package net.piratjsk.sddls.listeners;
 
 import net.piratjsk.sddls.saddle.SignedSaddle;
-import net.piratjsk.sddls.signature.Signature;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,29 +8,44 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.piratjsk.sddls.Sddls;
+import org.bukkit.inventory.Recipe;
 
 import java.util.Arrays;
 import java.util.Objects;
 
+import static net.piratjsk.sddls.saddle.SignedSaddle.isValidSaddleItem;
+
 public final class SigningListener implements Listener {
-
-    private final Sddls sddls;
-
-    public SigningListener(final Sddls sddlsPlugin) {
-        this.sddls = sddlsPlugin;
-    }
 
     @EventHandler
     public void onSaddleSign(final PrepareItemCraftEvent event) {
-        if (!this.sddls.isSigningRecipe(event.getRecipe())) return;
+        if (isSomeoneActuallyTryingToSignASaddle(event))
+            signSaddle(event);
+    }
+
+    private boolean isSomeoneActuallyTryingToSignASaddle(final PrepareItemCraftEvent event) {
+        return isSigningRecipe(event.getRecipe()) && isValidSaddleItem(getSaddleItem(event));
+    }
+
+    private boolean isSigningRecipe(final Recipe recipe) {
+        return Sddls.isSigningRecipe(recipe);
+    }
+
+    private ItemStack getSaddleItem(final PrepareItemCraftEvent event) {
+        return Arrays.stream(event.getInventory().getMatrix())
+                .filter(Objects::nonNull)
+                .toArray(ItemStack[]::new)[0].clone();
+
+    }
+
+    private void signSaddle(final PrepareItemCraftEvent event) {
+        final ItemStack item = getSaddleItem(event);
+        final SignedSaddle saddle = SignedSaddle.fromItemStack(item);
         final Player player = (Player) event.getView().getPlayer();
-        final ItemStack toSign = Arrays.stream(event.getInventory().getMatrix()).filter(Objects::nonNull).toArray(ItemStack[]::new)[0].clone();
-        final SignedSaddle saddle = SignedSaddle.fromItemStack(toSign);
         if (saddle.isSignedBy(player)) {
-            saddle.getSignatures().clear();
+            saddle.removeAllSignatures();
         } else {
-            final Signature signature = this.sddls.getPlayerSignature(player);
-            saddle.sign(signature);
+            saddle.sign(player);
         }
         event.getInventory().setResult(saddle.getItem());
     }

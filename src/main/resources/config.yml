@@ -1,10 +1,3 @@
-# available types:
-# - fancy
-#     %name% %uuid encoded as invisible code%
-# - uuid
-#     %uuid%
-signature-type: fancy
-
 # Number of days player must be offline to remove his signatures.
 # Set to false to disable.
 signature-expires-after: 14

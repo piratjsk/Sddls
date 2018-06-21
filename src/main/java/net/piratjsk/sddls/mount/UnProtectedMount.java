@@ -29,4 +29,5 @@ public class UnProtectedMount extends GenericMount {
     public boolean isSaddled() {
         return false;
     }
+
 }
