@@ -5,6 +5,7 @@ author: piratjsk
 website: https://github.com/piratjsk/Sddls
 
 main: @group@.Sddls
+api-version: 1.13
 
 commands:
   sddls:
