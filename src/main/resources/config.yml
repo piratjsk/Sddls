@@ -9,7 +9,7 @@ protect:
   donkey: true
   mule: true
   pig: false
-  lama: false
+  llama: false
 
 # Available variables:
 # %mount% - type of the mount (horse, zombie horse, donkey, ...)
