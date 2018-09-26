@@ -26,6 +26,7 @@ public final class MountListener implements Listener {
 
     @EventHandler
     public void onMountAccess(final PlayerInteractEntityEvent event) {
+        if (!Sddls.canBeProtected(event.getRightClicked().getType())) return;
         final ProtectedMount mount = ProtectedMount.fromEntity(event.getRightClicked());
         if (mount.isProtectedFromPlayer(event.getPlayer())) {
             event.setCancelled(true);
@@ -35,6 +36,7 @@ public final class MountListener implements Listener {
 
     @EventHandler
     public void onMountDamage(final EntityDamageEvent event) {
+        if (!Sddls.canBeProtected(event.getEntityType())) return;
         final ProtectedMount mount = ProtectedMount.fromEntity(event.getEntity());
         final DamageDealer damageDealer = getDamageDealer(event);
         if (shouldBeProtected(mount, damageDealer))
