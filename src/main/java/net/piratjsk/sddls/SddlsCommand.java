@@ -32,8 +32,8 @@ public final class SddlsCommand implements CommandExecutor {
 
     private void sendPluginInfo(final CommandSender recipient) {
         final PluginDescriptionFile info = sddls.getDescription();
-        sendMsg(recipient, info.getFullName() + " v" + info.getVersion());
-        sendMsg(recipient, "by " + info.getAuthors());
+        sendMsg(recipient, info.getFullName());
+        sendMsg(recipient, "by " + String.join(", ", info.getAuthors()));
         sendMsg(recipient, info.getDescription());
         sendMsg(recipient, "&7"+ info.getWebsite());
     }
