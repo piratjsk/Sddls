@@ -2,13 +2,10 @@ package net.piratjsk.sddls.mount;
 
 import net.piratjsk.sddls.saddle.SignedSaddle;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Pig;
 import org.bukkit.inventory.ItemStack;
 
-public class ProtectedPig extends GenericMount {
-
-    private final SignedSaddle saddle;
+public class ProtectedPig extends GenericProtectedMount {
 
     public ProtectedPig(final Pig pig) {
         super(pig);
@@ -19,23 +16,4 @@ public class ProtectedPig extends GenericMount {
 
     }
 
-    @Override
-    public SignedSaddle getSaddle() {
-        return this.saddle;
-    }
-
-    @Override
-    public boolean isProtectedFromEnvironment() {
-        return false;
-    }
-
-    @Override
-    public boolean isProtectedFromPlayer(OfflinePlayer player) {
-        return false;
-    }
-
-    @Override
-    public boolean isSaddled() {
-        return false;
-    }
 }

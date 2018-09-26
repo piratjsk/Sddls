@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Llama;
 import org.bukkit.entity.Pig;
 
 public interface ProtectedMount {
@@ -23,12 +24,14 @@ public interface ProtectedMount {
     boolean isSaddled();
 
     static ProtectedMount fromEntity(final Entity entity) {
-        if (!Sddls.canBeProtected(entity.getType())) return new UnProtectedMount(entity);
+        if (!Sddls.canBeProtected(entity.getType())) return new GenericProtectedMount(entity);
+        if (entity instanceof Llama)
+            return new ProtectedLlama((Llama) entity);
         if (entity instanceof AbstractHorse)
             return new ProtectedHorse((AbstractHorse) entity);
         if (entity.getType().equals(EntityType.PIG))
             return new ProtectedPig((Pig) entity);
-        return new UnProtectedMount(entity);
+        return new GenericProtectedMount(entity);
     }
 
 }
