@@ -8,7 +8,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,7 +16,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import net.piratjsk.sddls.Sddls;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,21 +36,21 @@ public final class MountListener implements Listener {
     @EventHandler
     public void onMountDamage(final EntityDamageEvent event) {
         final ProtectedMount mount = ProtectedMount.fromEntity(event.getEntity());
-        final Damager damager = getDamager(event);
-        if (shouldBeProtected(mount, damager))
+        final DamageDealer damageDealer = getDamageDealer(event);
+        if (shouldBeProtected(mount, damageDealer))
             event.setCancelled(true);
     }
 
-    private boolean shouldBeProtected(final ProtectedMount mount, final Damager damager) {
-        if (damager.isPlayer()) {
-            final Player player = getPlayer(damager);
+    private boolean shouldBeProtected(final ProtectedMount mount, final DamageDealer damageDealer) {
+        if (damageDealer.isPlayer()) {
+            final Player player = getPlayer(damageDealer);
             return mount.isProtectedFromPlayer(player);
         }
         return mount.isProtectedFromEnvironment();
     }
 
-    private Player getPlayer(final Damager damager) {
-        return Bukkit.getPlayer(damager.uuid);
+    private Player getPlayer(final DamageDealer damageDealer) {
+        return Bukkit.getPlayer(damageDealer.uuid);
     }
 
     private void sendNoAccessMessage(final Player player, final ProtectedMount mount) {
@@ -73,20 +71,20 @@ public final class MountListener implements Listener {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
-    private Damager getDamager(final EntityDamageEvent event) {
-        if (!(event instanceof EntityDamageByEntityEvent)) return new Damager();
+    private DamageDealer getDamageDealer(final EntityDamageEvent event) {
+        if (!(event instanceof EntityDamageByEntityEvent)) return new DamageDealer();
         final EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
-        return new Damager(damageEvent.getDamager());
+        return new DamageDealer(damageEvent.getDamager());
     }
 
-    private final class Damager {
+    private final class DamageDealer {
         private final EntityType type;
         private final UUID uuid;
-        Damager() {
+        DamageDealer() {
             this.type = null;
             this.uuid = null;
         }
-        Damager(final Entity entity) {
+        DamageDealer(final Entity entity) {
             this.type = entity.getType();
             this.uuid = entity.getUniqueId();
         }
