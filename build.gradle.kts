@@ -1,9 +1,11 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 import org.gradle.language.jvm.tasks.ProcessResources
 import org.apache.tools.ant.filters.ReplaceTokens
 import org.gradle.jvm.tasks.Jar
 
 plugins {
     java
+    id("net.minecrell.plugin-yml.bukkit") version "0.3.0"
     kotlin("jvm") version "1.2.71"
 }
 
@@ -22,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    compile("org.bukkit:bukkit:${project.property("bukkitVersion")}")
+    implementation("org.bukkit:bukkit:1.13.1-R0.1-SNAPSHOT")
 
     testImplementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test"))
@@ -40,15 +42,27 @@ dependencies {
 
 val test : Test by tasks
 test.useJUnitPlatform { includeEngines("spek") }
-        "group" to project.property("group"),
-        "name" to project.property("name"),
-        "version" to project.property("version")
-)
-processResources.apply {
-    from("src/main/resources") {
-        filter<ReplaceTokens>("tokens" to tokens)
+
+bukkit {
+    main = "net.piratjsk.sddls.Sddls"
+    apiVersion = "1.13"
+
+    commands {
+        create("sddls") {
+            description = "Prints information about plugin. With 'reload' argument reloads plugin configuration."
+        }
+    }
+    permissions {
+        create("sddls.reload") {
+            default = BukkitPluginDescription.Permission.Default.OP
+            description = "Allows you to use 'sddls reload' command."
+        }
+        create("sddls.bypass") {
+            default = BukkitPluginDescription.Permission.Default.OP
+            description = "Allows you to bypass signed saddles protection."
+        }
     }
 }
 
-val jar = tasks.getByName("jar") as Jar
-jar.apply { from("LICENSE") }
+val jar : Jar by tasks
+jar.from("LICENSE")
