@@ -4,6 +4,7 @@ import net.piratjsk.sddls.Sddls;
 import net.piratjsk.sddls.signature.Signature;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -100,7 +101,7 @@ public class SignedSaddle {
     }
 
     public static boolean isValidSaddleItem(final ItemStack item) {
-        return item != null && (item.getType().equals(Material.SADDLE) || item.getType().equals(Material.CARPET));
+        return item != null && (item.getType().equals(Material.SADDLE) || Tag.CARPETS.getValues().contains(item.getType()));
     }
 
 }
