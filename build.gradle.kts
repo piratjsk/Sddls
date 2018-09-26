@@ -9,6 +9,11 @@ plugins {
 group = project.property("group")!!
 version = project.property("version")!!
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 repositories {
     jcenter()
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
