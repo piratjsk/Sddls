@@ -40,25 +40,25 @@ public final class MountListener implements Listener {
     public void onMountDamage(final EntityDamageEvent event) {
         if (!Sddls.canBeProtected(event.getEntityType())) return;
         final ProtectedMount mount = ProtectedMount.fromEntity(event.getEntity());
-        final DamageDealer damageDealer = getDamageDealer(event);
-        if (shouldBeProtected(mount, damageDealer))
+        final Damager damager = getDamager(event);
+        if (shouldBeProtected(mount, damager))
             event.setCancelled(true);
     }
 
-    private boolean shouldBeProtected(final ProtectedMount mount, final DamageDealer damageDealer) {
-        if (damageDealer.isPlayer()) {
-            final Player player = getPlayer(damageDealer);
+    private boolean shouldBeProtected(final ProtectedMount mount, final Damager damager) {
+        if (damager.isPlayer()) {
+            final Player player = getPlayer(damager);
             return mount.isProtectedFromPlayer(player);
         }
         return mount.isProtectedFromEnvironment();
     }
 
-    private Player getPlayer(final DamageDealer damageDealer) {
-        return Bukkit.getPlayer(damageDealer.uuid);
+    private Player getPlayer(final Damager damager) {
+        return Bukkit.getPlayer(damager.uuid);
     }
 
     private void sendNoAccessMessage(final Player player, final ProtectedMount mount) {
-        final Configuration config = JavaPlugin.getPlugin(Sddls.class).getConfig();
+        final Configuration config = Sddls.getInstance().getConfig();
         final Entity entity = mount.getEntity();
         final String type = entity.getType().toString().toLowerCase().replaceAll("_", "-");
         final String name = entity.getCustomName() != null ? entity.getCustomName() : type;
@@ -75,26 +75,25 @@ public final class MountListener implements Listener {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
     }
 
-    private DamageDealer getDamageDealer(final EntityDamageEvent event) {
-        if (!(event instanceof EntityDamageByEntityEvent)) return new DamageDealer();
+    private Damager getDamager(final EntityDamageEvent event) {
+        if (!(event instanceof EntityDamageByEntityEvent)) return new Damager();
         final EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
         final Entity damager = damageEvent.getDamager();
         if (damager instanceof Projectile) {
             final ProjectileSource shooter = ((Projectile) damager).getShooter();
-            if (shooter instanceof Entity)
-                return new DamageDealer((Entity) shooter);
+            return new Damager((Entity) shooter);
         }
-        return new DamageDealer(damageEvent.getDamager());
+        return new Damager(damageEvent.getDamager());
     }
 
-    private final class DamageDealer {
+    private final class Damager {
         private final EntityType type;
         private final UUID uuid;
-        DamageDealer() {
+        Damager() {
             this.type = null;
             this.uuid = null;
         }
-        DamageDealer(final Entity entity) {
+        Damager(final Entity entity) {
             this.type = entity.getType();
             this.uuid = entity.getUniqueId();
         }
