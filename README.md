@@ -1,4 +1,10 @@
 # Sddls
+
+
+[![GitHub license](https://img.shields.io/github/license/piratjsk/Sddls.svg)](https://github.com/piratjsk/Sddls/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/piratjsk/Sddls.svg)](https://github.com/piratjsk/Sddls/releases/latest)
+[![Github All Releases](https://img.shields.io/github/downloads/piratjsk/Sddls/total.svg)](https://github.com/piratjsk/Sddls/releases)
+
 Bukkit plugin that lets you protect mounts with signed saddles (and carpets).
 
 **Spigot**: [spigotmc.org/resources/sddls.24049/](https://www.spigotmc.org/resources/sddls.24049/)  
