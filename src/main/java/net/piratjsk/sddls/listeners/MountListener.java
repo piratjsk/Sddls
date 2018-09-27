@@ -8,6 +8,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -16,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import net.piratjsk.sddls.Sddls;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -76,6 +78,12 @@ public final class MountListener implements Listener {
     private DamageDealer getDamageDealer(final EntityDamageEvent event) {
         if (!(event instanceof EntityDamageByEntityEvent)) return new DamageDealer();
         final EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) event;
+        final Entity damager = damageEvent.getDamager();
+        if (damager instanceof Projectile) {
+            final ProjectileSource shooter = ((Projectile) damager).getShooter();
+            if (shooter instanceof Entity)
+                return new DamageDealer((Entity) shooter);
+        }
         return new DamageDealer(damageEvent.getDamager());
     }
 
