@@ -67,21 +67,25 @@ public final class Sddls extends JavaPlugin {
 
     public static boolean canBeProtected(final EntityType entityType) {
         final String type = entityType.name().toLowerCase().replaceAll("_", "-");
-        final Configuration config = JavaPlugin.getPlugin(Sddls.class).getConfig();
+        final Configuration config = Sddls.getInstance().getConfig();
         return config.getBoolean("protect."+type, false);
     }
 
     public static boolean isSigningRecipe(final Recipe recipe) {
         if (!(recipe instanceof ShapelessRecipe)) return false;
         final NamespacedKey recipeKey = ((ShapelessRecipe) recipe).getKey();
-        final NamespacedKey saddleRecipeKey = JavaPlugin.getPlugin(Sddls.class).signSaddleRecipe.getKey();
-        final NamespacedKey carpetRecipeKey = JavaPlugin.getPlugin(Sddls.class).signCarpetRecipe.getKey();
+        final NamespacedKey saddleRecipeKey = Sddls.getInstance().signSaddleRecipe.getKey();
+        final NamespacedKey carpetRecipeKey = Sddls.getInstance().signCarpetRecipe.getKey();
         return recipeKey.equals(saddleRecipeKey) || recipeKey.equals(carpetRecipeKey);
     }
 
     public static int getOfflineDaysLimit() {
-        final Configuration config = JavaPlugin.getPlugin(Sddls.class).getConfig();
+        final Configuration config = Sddls.getInstance().getConfig();
         return config.getInt("signature-expires-after", 0);
+    }
+
+    public static Sddls getInstance() {
+        return JavaPlugin.getPlugin(Sddls.class);
     }
 
 }
