@@ -11,7 +11,7 @@ Bukkit plugin that lets you protect mounts with signed saddles (and carpets).
 **BukkitDev**: [dev.bukkit.org/projects/sddls](https://dev.bukkit.org/projects/sddls)
 
 ## Usage
-Mounts (horses, donkeys, mules, pigs, lamas) wearing signed saddle (or carpet in case of lamas) will be protected:
+Mounts (horses, donkeys, mules, pigs, llamas) wearing signed saddle (or carpet in case of llamas) will be protected:
 - from damage caused by other players and enviroment when no one is ridding them,
 - from damage caused by other players when someone is ridding them,
 - from being accessed by other players.
