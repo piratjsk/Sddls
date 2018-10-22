@@ -1,6 +1,6 @@
 # Sddls
 
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/9285192b3d8e66d8baa5/maintainability)](https://codeclimate.com/github/piratjsk/Sddls/maintainability)
 [![GitHub license](https://img.shields.io/github/license/piratjsk/Sddls.svg)](https://github.com/piratjsk/Sddls/blob/master/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/piratjsk/Sddls.svg)](https://github.com/piratjsk/Sddls/releases/latest)
 [![Github All Releases](https://img.shields.io/github/downloads/piratjsk/Sddls/total.svg)](https://github.com/piratjsk/Sddls/releases)
